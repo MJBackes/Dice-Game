@@ -28,6 +28,14 @@ legend{
 	font-size: 34px;
 	font-weight: bold;
 }
+.diceSlot h1{
+	margin: 0px;
+	padding: 0px;
+	position: relative;
+	transform: translate(0, -130%);
+	font-size: 38px;
+	
+}
 #player1Tray h2{
 	color: blue;
 }
@@ -86,6 +94,9 @@ legend{
 	display: inline-block;
 	background-position: center;
 	background-size: cover;
+	text-align: center;
+	color: white;
+
 }
 .p1DiceSlot{
 	background-color: lightblue;
@@ -103,5 +114,18 @@ legend{
 	background-color: darkgreen;
 }
 .row{
+	text-align: center;
+}
+.col3{
+	width: 33%;
+	height: 45px;
+	display: inline-block;
+	margin: 0px;
+}
+.potDisplay{
+	width: 100%;
+	text-align: center;
+}
+#potContainer{
 	text-align: center;
 }

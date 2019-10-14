@@ -29,24 +29,24 @@
 						<span class="diceTrayDisplay" id="p1d6"></span>
 						<p>d6</p>
 						<button type="button" class="diceButton hidden firstSlotP1" onclick="useFirstDiceP1('p1d6',6, 'p1s1')" id="p1d6Btn">Use</button>
-						<button type="button" class="diceButton hidden secondSlotP1" onclick="useSecondDiceP1('p1d6',6 'p1s2')" id="p1d6Btn">Use</button>
+						<button type="button" class="diceButton hidden secondSlotP1" onclick="useSecondDiceP1('p1d6',6, 'p1s2')" id="p1d6Btn">Use</button>
 						<br>
 						<span class="diceTrayDisplay" id="p1d4"></span>
 						<p>d4</p>
 						<button type="button" class="diceButton hidden firstSlotP1" onclick="useFirstDiceP1('p1d4',4, 'p1s1')" id="p1d4Btn">Use</button>
-						<button type="button" class="diceButton hidden secondSlotP1" onclick="useSecondDiceP1('p1d4',4 'p1s2')" id="p1d4Btn">Use</button>
+						<button type="button" class="diceButton hidden secondSlotP1" onclick="useSecondDiceP1('p1d4',4, 'p1s2')" id="p1d4Btn">Use</button>
 						<br>
 						<span class="diceTrayDisplay" id="p1d3"></span>
 						<p>d3</p>
 						<button type="button" class="diceButton hidden firstSlotP1" onclick="useFirstDiceP1('p1d3',3, 'p1s1')" id="p1d3Btn">Use</button>
-						<button type="button" class="diceButton hidden secondSlotP1" onclick="useSecondDiceP1('p1d3',3 'p1s2')" id="p1d3Btn">Use</button>
+						<button type="button" class="diceButton hidden secondSlotP1" onclick="useSecondDiceP1('p1d3',3, 'p1s2')" id="p1d3Btn">Use</button>
 						<br>
 					</fieldset>
 					<fieldset class="chipCount">
 						<h2 id="p1Chips"></h2>
 						<h3>Chips</h5>
 							<input type="number" id="p1BetInput" class="betInput hidden bet">
-							<button id="p1BetBtn" class="betButton hidden bet" onclick="placeBetP1()">Bet</button>
+							<button type="button" id="p1BetBtn" class="betButton hidden bet" onclick="placeBetP1()">Bet</button>
 					</fieldset>
 				</form>
 			</div>
@@ -89,7 +89,7 @@
 						<h2 id="p2Chips"></h2>
 						<h3>Chips</h5>
 							<input type="number" id="p2BetInput" class="betInput hidden bet">
-							<button id="p2BetBtn" class="betButton hidden bet" onclick="placeBetP2()">Bet</button>
+							<button type="button" id="p2BetBtn" class="betButton hidden bet" onclick="placeBetP2()">Bet</button>
 					</fieldset>
 				</form>
 			</div>
@@ -127,7 +127,8 @@
 		<div class="row">
 			<div class="col3"></div>
 			<div id="startContainer" class="col3">
-				<button type="button" class="hidden" onclick="start()">Start!</button>
+				<button type="button" class="start hidden" onclick="start()">Start!</button>
+				<button type="button" id="playHandBtn" class="playHand hidden" onclick="playHand()">Play Hand</button>
 			</div>
 			<div class="col3"></div>
 		</div>

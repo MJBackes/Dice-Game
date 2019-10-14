@@ -1,6 +1,20 @@
 function start(){
-hideInterface();
-buildDiceTray();
+	hideInterface();
+	buildDiceTray();
+	showPlayHandBtn();
+}
+function playHand(){
+	hidePlayHandBtn();
+	flop();
+	takeBlindP1();
+	takeBlindP2();
+	openBets();
+}
+function showPlayHandBtn(){
+	document.getElementById("playHandBtn").style.visibility = "visible";
+}
+function hidePlayHandBtn(){
+	document.getElementById("playHandBtn").style.visibility = "hidden";
 }
 function rollDie(size){
 	let roll = Math.random() * (size - 1);
@@ -20,11 +34,12 @@ function buildDiceTray(){
 	document.getElementById("p1d13").innerHTML = 3;
 	document.getElementById("p2d13").innerHTML = 3;
 	document.getElementById("p1d10").innerHTML = 3;
-	document.getElementById("p1d10").innerHTML = 3;
+	document.getElementById("p2d10").innerHTML = 3;
 	document.getElementById("p1Chips").innerHTML = 50;
 	document.getElementById("p2Chips").innerHTML = 50;
+	document.getElementById("potOutput").innerHTML = 0;
 }
-function displayDie(size, location){
+function displayDie(size, location, className){
 	let number = rollDie(size);
 	if(size > 9){
 	document.getElementById(location).style.backgroundImage = "url(images/diamonds.png)";
@@ -35,19 +50,19 @@ function displayDie(size, location){
 	else if(size > 2){
 	document.getElementById(location).style.backgroundImage = "url(images/clubs.png)";
 	}
-	if(number < 11){
-	document.getElementById(location).innerHTML = "<h1>" + number + "</h1>";
-	}
-	else if(number == 11){
-	document.getElementById(location).innerHTML = "<h1>J</h1>";
-	}
-	else if(number == 12){
-	document.getElementById(location).innerHTML = "<h1>Q</h1>";
-	}
-	else if(number == 13){
-	document.getElementById(location).innerHTML = "<h1>Q</h1>";
-	}
-	document.getElementById(location).style.paddingTop = "14%";
+		if(number < 11){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + "'>" + number + "</h1>";
+		}
+		else if(number == 11){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + "'>J</h1>";
+		}
+		else if(number == 12){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + "'>Q</h1>";
+		}
+		else if(number == 13){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + "'>Q</h1>";
+		}
+		document.getElementById(location).style.paddingTop = "14%";
 }
 function getPublicDiceSize(){
 	let size = rollDie(6);
@@ -77,6 +92,10 @@ function flop(){
 		displayDie(getPublicDiceSize(), "public" + i);
 	}
 }
+function river(){
+	displayDie(getPublicDiceSize(), "public4", "riverDie");
+	openBets();
+}
 function openBets(){
 	let betArray = document.getElementsByClassName("bet");
 	for(let i = 0; i < betArray.length; i++){
@@ -92,22 +111,34 @@ function closeP2Bets(){
 	document.getElementById("p2BetBtn").style.visibility = "hidden";
 }
 function placeBetP1(){
-	let bet = document.getElementById("p1BetInput").value;
+	let bet = Math.abs(parseInt(document.getElementById("p1BetInput").value));
 	if(document.getElementById("p1Chips").innerHTML > bet){
 		document.getElementById("p1Chips").innerHTML -= bet;
-		document.getElementById("potOutput").innerHTML += bet;
+		document.getElementById("potOutput").innerHTML = bet + parseInt(document.getElementById("potOutput").innerHTML);
 		closeP1Bets();
+		if(!areAllDiceChosen()){
+			openFirstDieP1();
+		}
+		else if(!areBetsOpen()){
+			river();
+		}
 	}
 	else{
 		alert("Bet too large(Player 1).");
 	}
 }
 function placeBetP2(){
-	let bet = document.getElementById("p2BetInput").value;
+	let bet = Math.abs(parseInt(document.getElementById("p2BetInput").value));
 	if(document.getElementById("p2Chips").innerHTML > bet){
 		document.getElementById("p2Chips").innerHTML -= bet;
-		document.getElementById("potOutput").innerHTML += bet;
+		document.getElementById("potOutput").innerHTML = bet + parseInt(document.getElementById("potOutput").innerHTML);
 		closeP2Bets();
+		if(!areAllDiceChosen()){
+			openFirstDieP2();
+		}
+		else if(!areBetsOpen()){
+			river();
+		}
 	}
 	else{
 		alert("Bet too large(Player 2).");
@@ -164,7 +195,7 @@ function closeSecondDieP2(){
 function useFirstDiceP1(location, size, target){
 	if(document.getElementById(location).innerHTML > 0){
 	document.getElementById(location).innerHTML--;
-	displayDie(size, target)
+	displayDie(size, target, "playerDice")
 	closeFirstDieP1();
 	openSecondDieP1();
 	}
@@ -175,7 +206,7 @@ function useFirstDiceP1(location, size, target){
 function useFirstDiceP2(location, size, target){
 	if(document.getElementById(location).innerHTML > 0){
 	document.getElementById(location).innerHTML--;
-	displayDie(size, target)
+	displayDie(size, target, "playerDice")
 	closeFirstDieP2();
 	openSecondDieP2();
 	}
@@ -185,9 +216,12 @@ function useFirstDiceP2(location, size, target){
 }
 function useSecondDiceP1(location, size, target){
 	if(document.getElementById(location).innerHTML > 0){
-	document.getElementById(location).innerHTML--;
-	displayDie(size, target)
-	closeSecondDieP1();
+		document.getElementById(location).innerHTML--;
+		displayDie(size, target, "playerDice")
+		closeSecondDieP1();
+		if(areAllDiceChosen()){
+		openBets();
+	}
 	}
 	else{
 		alert("Not enough of that kind of die.")
@@ -196,10 +230,58 @@ function useSecondDiceP1(location, size, target){
 function useSecondDiceP2(location, size, target){
 	if(document.getElementById(location).innerHTML > 0){
 	document.getElementById(location).innerHTML--;
-	displayDie(size, target)
+	displayDie(size, target, "playerDice")
 	closeSecondDieP2();
+	if(areAllDiceChosen()){
+		openBets();
+	}
 	}
 	else{
 		alert("Not enough of that kind of die.")
+	}
+}
+function takeBlindP1(){
+	let blind = 5;
+	let pot = parseInt(document.getElementById("potOutput").innerHTML);
+	if(document.getElementById("p1Chips").innerHTML > blind){
+		document.getElementById("p1Chips").innerHTML -= blind;
+		pot += blind;
+		document.getElementById("potOutput").innerHTML = pot;
+	}
+	else{
+		blind = parseInt(document.getElementById("p1Chips").innerHTML);
+		document.getElementById("p1Chips").innerHTML -= blind;
+		pot += blind;
+		document.getElementById("potOutput").innerHTML = pot;
+	}
+}
+function takeBlindP2(){
+	let blind = 5;
+	let pot = parseInt(document.getElementById("potOutput").innerHTML);
+	if(document.getElementById("p2Chips").innerHTML > blind){
+		document.getElementById("p2Chips").innerHTML -= blind;
+		pot += blind;
+		document.getElementById("potOutput").innerHTML = pot;
+	}
+	else{
+		blind = parseInt(document.getElementById("p2Chips").innerHTML);
+		document.getElementById("p2Chips").innerHTML -= blind;
+		pot += blind;
+		document.getElementById("potOutput").innerHTML = pot;
+	}
+}
+function areAllDiceChosen(){
+	let array = document.getElementsByClassName("playerDice");
+	if(array.length === 4){
+		return true;
+	}
+	return false;
+}
+function areBetsOpen(){
+	if(document.getElementById("p2BetInput").style.visibility == "hidden" && document.getElementById("p1BetInput").style.visibility == "hidden"){
+		return false;
+	}
+	else{
+		return true;
 	}
 }

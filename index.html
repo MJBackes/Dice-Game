@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>(Pseudo)Texas Hold'em</title>
+	<link rel="stylesheet" type="text/css" href="diceGame.css">
+</head>
+<body>
+	<div id="container">
+		<div id="row">
+			<div class="halfCol">
+				<form class="diceTray" id="player1Tray">
+					<legend>Player 1</legend>
+					<fieldset>
+						<span class="diceTrayDisplay" id="p1d13"></span>
+						<p>d12</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p1d13Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p1d10"></span>
+						<p>d10</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p1d10Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p1d8"></span>
+						<p>d8</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p1d8Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p1d6"></span>
+						<p>d6</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p1d6Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p1d4"></span>
+						<p>d4</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p1d4Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p1d3"></span>
+						<p>d3</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p1d3Btn">Use</button>
+						<br>
+					</fieldset>
+					<fieldset class="chipCount">
+						<h2 id="p1Chips"></h2>
+						<h3>Chips</h5>
+							<input type="number" id="p1BetInput" class="betInput hidden">
+							<button id="p1BetBtn" class="betButton hidden">Bet</button>
+					</fieldset>
+				</form>
+			</div>
+			<div class="halfCol">
+				<form class="diceTray" id="player2Tray">
+					<legend>Player 2</legend>
+					<fieldset>
+						<span class="diceTrayDisplay" id="p2d13"></span>
+						<p>d12</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p2d13Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p2d10"></span>
+						<p>d10</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p2d10Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p2d8"></span>
+						<p>d8</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p2d8Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p2d6"></span>
+						<p>d6</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p2d6Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p2d4"></span>
+						<p>d4</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p2d4Btn">Use</button>
+						<br>
+						<span class="diceTrayDisplay" id="p2d3"></span>
+						<p>d3</p>
+						<button type="button" class="diceButton hidden" onclick="" id="p2d3Btn">Use</button>
+						<br>
+					</fieldset>
+					<fieldset class="chipCount">
+						<h2 id="p2Chips"></h2>
+						<h3>Chips</h5>
+							<input type="number" id="p2BetInput" class="betInput hidden">
+							<button id="p2BetBtn" class="betButton hidden">Bet</button>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="halfCol" id="p1RolledDice">
+				<div id="p1s1" class="p1DiceSlot diceSlot">
+					
+				</div>
+				<div id="p1s2" class="p1DiceSlot diceSlot">
+					
+				</div>
+			</div>
+			<div class="halfCol" id="p2RolledDice">
+				<div id="p2s1" class="p2DiceSlot diceSlot">
+					
+				</div>
+				<div id="p2s2" class="p2DiceSlot diceSlot">
+					
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="board">
+				<div id="public1" class="diceSlot flopSlot">
+					
+				</div>
+				<div id="public2" class="diceSlot flopSlot">
+					
+				</div>
+				<div id="public3" class="diceSlot flopSlot">
+					
+				</div>
+				<div id="public4" class="diceSlot turnSlot">
+					
+				</div>
+				<div id="public5" class="diceSlot riverSlot">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="diceGame.js"></script>
+</html>

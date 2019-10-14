@@ -1,0 +1,107 @@
+body{
+	background-color: green;
+	margin: 0px;
+}
+fieldset{
+	background-color: lightgreen;
+}
+.halfCol{
+	width: 100%;
+	display: block;
+}
+@media screen and (min-width: 510px){
+	.halfCol{
+	width: 49.5%;
+	display: inline-block;
+}
+}
+p{
+	display: inline-block;
+}
+h3{
+	display: inline-block;
+}
+h2{
+	display: inline-block;
+}
+legend{
+	font-size: 34px;
+	font-weight: bold;
+}
+#player1Tray h2{
+	color: blue;
+}
+#player2Tray h2{
+	color: red;
+}
+.diceTrayDisplay{
+	display: inline;
+	font-size: 23px;
+}
+#player1Tray .diceTrayDisplay{
+	color: blue;
+}
+#player2Tray .diceTrayDisplay{
+	color: red;
+}
+#player1Tray fieldset{
+	border-color: lightblue;
+	border-width: 5px;
+}
+#player2Tray fieldset{
+	border-color: pink;
+	border-width: 4px;
+}
+.diceButton{
+	border-radius: none;
+	color: white;
+	background-color: darkgreen;
+	border: none;
+}
+#player1Tray .betButton{
+	border-radius: none;
+	color: white;
+	background-color: blue;
+	border: none;
+}
+#player2Tray .betButton{
+	border-radius: none;
+	color: white;
+	background-color: red;
+	border: none;
+}
+.betButton{
+}
+.betInput{
+	width: 45px;
+	height: 25px;
+	font-size: 21px;
+	background-color: lightgreen;
+
+}
+.diceSlot{
+	margin-top: 36%;
+	width: 18%;
+	padding-top: 18%;
+	display: inline-block;
+	background-position: center;
+	background-size: cover;
+}
+.p1DiceSlot{
+	background-color: lightblue;
+}
+.p2DiceSlot{
+	background-color: pink;
+}
+.flopSlot{
+	background-color: lightgreen;
+}
+.turnSlot{
+	background-color: darkgreen;
+}
+.riverSlot{
+	background-color: darkgreen;
+}
+.row{
+	text-align: center;
+}

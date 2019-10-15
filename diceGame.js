@@ -11,17 +11,16 @@ function playHand(){
 	}
 }
 function testHand(){
-	flop();
-	turn();
-	river();
-	displayDie(8, 'p1s1', "playerDice p1Hand");
-	displayDie(8, 'p1s2', "playerDice p1Hand");
-	displayDie(8, 'p2s1', "playerDice p2Hand");
-	displayDie(8, 'p2s2', "playerDice p2Hand");
-	let matrix = getHandMatrix(document.getElementsByClassName("p1Hand"));
-	console.log(isFlush(matrix));
-	matrix = getHandMatrix(document.getElementsByClassName("p2Hand"));
-	console.log(isFlush(matrix));
+	displayTestDie(1, 'public1', "playerDice p1Hand p2Hand", "hearts");
+	displayTestDie(2, 'public2', "playerDice p1Hand p2Hand", "hearts");
+	displayTestDie(3, 'public3', "playerDice p1Hand p2Hand", "hearts");
+	displayTestDie(4, 'public4', "playerDice p1Hand p2Hand", "hearts");
+	displayTestDie(5, 'public5', "playerDice p1Hand p2Hand", "hearts");
+	displayTestDie(6, 'p1s1', "playerDice p1Hand", "hearts");
+	displayTestDie(7, 'p1s2', "playerDice p1Hand", "hearts");
+	displayTestDie(8, 'p2s1', "playerDice p2Hand", "hearts");
+	displayTestDie(9, 'p2s2', "playerDice p2Hand", "hearts");
+	
 }
 function showPlayHandBtn(){
 	document.getElementById("playHandBtn").style.visibility = "visible";
@@ -72,8 +71,11 @@ function displayDie(size, location, className,){
 	else if(size > 2){
 	document.getElementById(location).style.backgroundImage = "url(images/clubs.png)";
 	suit = 'clubs';
-	}
-		if(number < 11){
+	}	
+		if(number == 1){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>A</h1>";
+		}
+		else if(number < 11){
 		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>" + number + "</h1>";
 		}
 		else if(number == 11){
@@ -83,7 +85,38 @@ function displayDie(size, location, className,){
 		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>Q</h1>";
 		}
 		else if(number == 13){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>K</h1>";
+		}
+		document.getElementById(location).style.paddingTop = "14%";
+}
+function displayTestDie(size, location, className, suit){
+	let number = size;
+	if(suit === "diamonds"){
+	document.getElementById(location).style.backgroundImage = "url(images/diamonds.png)";
+	suit = 'diamonds';
+	}
+	else if(suit === "hearts"){
+	document.getElementById(location).style.backgroundImage = "url(images/hearts.png)";
+	suit = 'hearts';
+	}
+	else if(suit === "clubs"){
+	document.getElementById(location).style.backgroundImage = "url(images/clubs.png)";
+	suit = 'clubs';
+	}
+			if(number == 1){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>A</h1>";
+		}
+		else if(number < 11){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>" + number + "</h1>";
+		}
+		else if(number == 11){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>J</h1>";
+		}
+		else if(number == 12){
 		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>Q</h1>";
+		}
+		else if(number == 13){
+		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>K</h1>";
 		}
 		document.getElementById(location).style.paddingTop = "14%";
 }
@@ -309,7 +342,7 @@ function takeBlindP2(){
 		document.getElementById("potOutput").innerHTML = pot;
 		return true;
 	}
-	else if(parseInt(document.getElementById("p2Chips").innerHTML)){
+	else if(parseInt(document.getElementById("p2Chips").innerHTML) > 0){
 		blind = parseInt(document.getElementById("p2Chips").innerHTML);
 		document.getElementById("p2Chips").innerHTML -= blind;
 		pot += blind;
@@ -342,9 +375,34 @@ function p1Loses(){
 function p1Loses(){
 
 }
+function splitPot(){
+	let pot = parseInt(document.getElementById("potOutput").innerHTML);
+	let rollover = pot % 2;
+	pot = (pot/2) - ((pot / 2) % 1);
+	document.getElementById("p1Chips").innerHTML = parseInt(document.getElementById("p1Chips").innerHTML) + pot;
+	document.getElementById("p2Chips").innerHTML = parseInt(document.getElementById("p2Chips").innerHTML) + pot;
+	document.getElementById("potOutput").innerHTML = rollover;
+}
+function p1WinsHand(){
+
+}
+function p1WinsHand(){
+	
+}
 function adjudicateHands(){
 	let player1Hand = getHandMatrix(document.getElementsByClassName("p1Hand"));
 	let player2Hand = getHandMatrix(document.getElementsByClassName("p2Hand"));
+	player1Hand = getBestHand(player1Hand);
+	player2Hand = getBestHand(player2Hand);
+	if(compareHandVaues(player1Hand, player2Hand, true).pop() == "tie"){
+		splitPot();
+	}
+	else if(compareHandVaues(player1Hand, player2Hand, true).pop() == player1Hand){
+		p1WinsHand();
+	}
+	else if(compareHandVaues(player1Hand, player2Hand, true).pop() == player2Hand){
+		p2WinsHand();
+	}
 }
 function getDiceSuit(dice){
 	if(isDiamond(dice)){
@@ -387,30 +445,343 @@ function isClub(dice){
 }
 function getHandMatrix(array){
 	let output = [];
+	let outputIndex = 0;
 	for(let i = 0; i < array.length; i++){
-		output[i] = [0,""];
-		output[i][0] = parseInt(array[i].innerHTML);
-		output[i][1] = getDiceSuit(array[i]);
+		output[outputIndex] = [0,""];
+		output[outputIndex][1] = getDiceSuit(array[i]);
+		if(array[i].innerHTML === "A"){
+			output[outputIndex][0] = 1;
+			output.push([14, getDiceSuit(array[i])]);
+			outputIndex++;
+		}
+		else if(array[i].innerHTML === "J"){
+			output[outputIndex][0] = 11;
+		}
+		else if(array[i].innerHTML === "Q"){
+			output[outputIndex][0] = 12;
+		}
+		else if(array[i].innerHTML === "K"){
+			output[outputIndex][0] = 13;
+		}
+		else{
+			output[outputIndex][0] = parseInt(array[i].innerHTML);
+		}
+		outputIndex++;
 	}
 	return output;
 }
+function getBestHand(playerNumber){
+	let inputMatrix = getHandMatrix(document.getElementsByClassName("p" + playerNumber + "Hand"));
+	let testMatrix = [[]];
+	let currentHighestValue = 0;
+	let currentBestHand = [0,0,0,0,0];
+	if(inputMatrix.length == 7){
+		for(let i = 0; i < inputMatrix.length; i++){
+			for(let j = 0; j < inputMatrix.length; j++){
+				if(i !== j){
+						testMatrix = [];
+					for(let k = 0; k < inputMatrix.length; k++){
+						if(k !== i && k !== j){
+							testMatrix.push(inputMatrix[k]);
+						}
+					}
+					//console.log(getHandValue(testMatrix));
+					currentBestHand = compareHandVaues(testMatrix, currentBestHand);
+				}
+			}
+		}
+	} else{
+		for(let i = 0; i < inputMatrix.length; i++){
+			for(let j = 0; j < inputMatrix.length; j++){
+				for(let l = 0; l < inputMatrix.length; l++){
+					if(i !== j && l !== j && i !== l){
+							testMatrix = [];
+						for(let k = 0; k < inputMatrix.length; k++){
+							if(k !== i && k !== j && k !== l){
+								testMatrix.push(inputMatrix[k]);
+							}
+						}
+						//console.log(getHandValue(testMatrix));
+					currentBestHand = compareHandVaues(testMatrix, currentBestHand);
+					}
+				}
+			}
+		}
+	}
+	return currentBestHand;
+}
+function getHandValue(matrix){
+	let highCard = getHighCard(matrix);
+	let repeats;
+	if(isNofAKind(matrix)){
+		repeats = getNOfAKind(matrix);
+	} else{
+		repeats = 0;
+	}
+	if(isStraight(matrix) && isFlush(matrix)){
+		return [9,highCard];
+	}
+	else if(repeats[0] == 4){
+		return [8,repeats[1],getNOfAKindKicker(matrix)];
+	}
+	else if(isfullHouse(matrix)){
+		return [7,getFullHouseTop(matrix),getFullHouseBottom(matrix)];
+	}
+	else if(isFlush(matrix)){
+		return [6,highCard];
+	}
+	else if(isStraight(matrix)){
+		return [5,highCard];
+	}
+	else if(repeats[0] == 3){
+		return [4,repeats[1],getNOfAKindKicker(matrix)];
+	}
+	else if(isTwoPair(matrix)){
+		return [3,getTwoPairValue(matrix)];
+	}
+	else if(repeats[0] == 2){
+		return [2,repeats[1],getNOfAKindKicker(matrix)]
+	}
+	else{
+		return [1,highCard];
+	}
+}
+function compareHandVaues(matrix1, matrix2, isFinal = false){
+	let value1 = getHandValue(matrix1);
+	let value2 = getHandValue(matrix2);
+	if(value1[0] !== value2[0]){
+		if(value1[0] > value2[0]){
+			return matrix1;
+		}
+		else{
+			return matrix2;
+		}
+	}
+	else if(value1[1] != value2[1]){
+		if(value1[1] > value2[1]){
+			return matrix1;
+		}
+		else{
+			return matrix2;
+		}
+	}
+	else if(isFullHouse(matrix1)){
+		if(value1[2] > value2[2]){
+			return matrix1;
+		}
+		else if(value1[2] < value2[2]){
+			return matrix2;
+		}
+		else{
+			if(isFinal){
+			matrix1.push("tie");
+		}
+			return matrix1;
+		}
+	}
+	else if(isTwoPair(matrix1)){
+		if(value1[2] > value2[2]){
+			return matrix1;
+		}
+		else if(value1[2] < value2[2]){
+			return matrix2;
+		}
+		else{
+			if(isFinal){
+			matrix1.push("tie");
+		}
+			return matrix1;
+		}
+	}
+	else if(isNofAKind(matrix1)){
+		if(value1[2] > value2[2]){
+			return matrix1;
+		}
+		else if(value1[2] < value2[2]){
+			return matrix2;
+		}
+		else{
+			if(isFinal){
+			matrix1.push("tie");
+		}
+			return matrix1;
+		}
+	}
+	else{
+		if(isFinal){
+			matrix1.push("tie");
+		}
+		return matrix1;
+	}
+}
+function getNOfAKindKicker(matrix){
+	let repeatCard = getNOfAKind(matrix)[1];
+	let testMatrix = [];
+	for(let i = 0; i < matrix.length; i++){
+		if(matrix[i][0] !== repeatCard){
+			testMatrix.push(matrix1[i]);
+		}
+	}
+	return getHighCard(testMatrix);
+}
 function isFlush(matrix){
+	let counter = 0;
+	for(let i = 0; i < matrix.length; i++){
+		if(matrix[i][1] === matrix[0][1]){
+			counter++;
+		}
+	if(counter >=5){
+		return true;
+	}
+	}
+	return false;
+}
+function getHighCard(matrix){
+	let currentLargest = 2;
+	for(let i = 0; i < matrix.length; i++){
+		if(matrix[i][0] > currentLargest){
+			currentLargest = matrix[i][0];
+		}
+	}
+	return currentLargest;
+}
+function isNofAKind(matrix){
 	let counter;
 	for(let i = 0; i < matrix.length; i++){
-		counter = 1;
+		counter = 0;
 		for(let j = 0; j < matrix.length; j++){
-			if(matrix[i][1] === matrix[j][1] && i!==j){
+			if(matrix[i][0] === matrix[j][0]){
 				counter++;
 			}
 		}
-		if(counter >=5){
+		if(counter >= 2){
+			return true;
+		}
+	}
+
+	return false;
+}
+function getNOfAKind(matrix){
+	let counter;
+	let currentLargest = 0;
+	let currentCard;
+	for(let i = 0; i < matrix.length; i++){
+		counter = 0;
+		for(let j = 0; j < matrix.length; j++){
+			if(matrix[i][0] === matrix[j][0]){
+				counter++;
+			}
+		}
+	if(counter > currentLargest){
+			currentLargest = counter;
+			currentCard = matrix[i][0];
+		}
+	}
+		return [currentLargest, currentCard];
+	
+}
+function isfullHouse(matrix){
+	let counter1;
+	let counter2;
+	for(let i = 0; i < matrix.length; i++){
+		counter1 = 0;
+		for(let j = 0; j < matrix.length; j++){
+			if(matrix[i][0] === matrix[j][0]){
+				counter1++;
+			}
+		}
+		if(counter1 >=3){
+			for(let j = 0; j < matrix.length; j++){
+				counter2 = 0;
+				for(let k = 0; k < matrix.length; k++){
+					if(matrix[j][0] === matrix[k][0] && matrix[j][0] !== matrix[i][0]){
+					counter2++;
+					}
+				}
+				if(counter2 >= 2){
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+function getFullHouseTop(matrix){
+	return topCard = getNOfAKind(matrix)[1];
+}
+function getFullHouseBottom(matrix){
+	let topCard = getFullHouseTop(matrix);
+	for(let i = 0; i < matrix.length; i++){
+		if(matrix[i][0] !== topCard){
+			return matrix[i][0];
+		}
+	}
+}
+function isTwoPair(matrix){
+	if(isNofAKind(matrix) && getNOfAKind(matrix)[0] == 2){
+		let firstPair = getNOfAKind(matrix);
+		for(let i = 0; i < matrix.length; i++){
+			for(let j = 0; j < matrix.length; j++){
+				if(i !== j && matrix[i][0] == matrix[j][0] && matrix[i][0] !== firstPair[1] && !isfullHouse(matrix)){
+					return true;
+				}	
+			}
+		}
+	}
+	return false;
+}
+function getTwoPairValue(matrix){
+	let firstPair = getNOfAKind(matrix);
+	let secondPair =[];
+	let kicker;
+		for(let i = 0; i < matrix.length; i++){
+			for(let j = 0; j < matrix.length; j++){
+				if(i !== j && matrix[i][0] == matrix[j][0] && matrix[i][0] !== firstPair[1]){
+					secondPair = [matrix[i][0],2];
+				}
+
+			}
+		}
+		if(secondPair[0] > firstPair[0]){
+			return [secondPair[0], firstPair[0],getTwoPairKicker(matrix,secondPair[0],firstPair[0])];
+		}
+		else{
+			return [firstPair[0], secondPair[0],getTwoPairKicker(matrix,secondPair[0],firstPair[0])]
+		}
+}
+function getTwoPairKicker(matrix, firstCard, secondCard){
+	for(let i = 0; i < matrix.length; i++){
+		if(matrix[i][0] !== firstCard && matrix[i][0] !== secondCard){
+			return matrix[i][0];
+		}
+	}
+}
+function isStraight(matrix){
+	let current;
+	let counter;
+	for(let i = 0; i < matrix.length; i++){
+		current = matrix[i][0];
+		counter = 1;
+		for(let j = 0; j < matrix.length; j++){
+			if((current + 1) == matrix[j][0]){
+				current++;
+				counter++
+				j = -1;
+			}
+		}
+		if(counter == 5){
 			return true;
 		}
 	}
 	return false;
 }
-function isfullHouse(matrix){
-	for(let i = 0; i < matrix.length; i++){
+/////////////////////////////////////////////
 
-	}
-}
+
+
+
+
+
+
+
+

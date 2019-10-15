@@ -1,3 +1,5 @@
+hideInterface();
+showStartBtn();
 function start(){
 	hideInterface();
 	buildDiceTray();
@@ -5,10 +7,21 @@ function start(){
 }
 function playHand(){
 	hidePlayHandBtn();
+	clearDiceSlots();
+	clearText();
+	checkDiceTray();
 	if(takeBlindP1() && takeBlindP2()){
 		flop();
 		openBets();
 	}
+}
+function playAgain(){
+	clearDiceSlots();
+	clearText();
+	start();
+}
+function clearText(){
+	document.getElementById("textOutput").innerHTML = "";
 }
 function testHand(){
 	displayTestDie(1, 'public1', "playerDice p1Hand p2Hand", "hearts");
@@ -24,6 +37,9 @@ function testHand(){
 }
 function showPlayHandBtn(){
 	document.getElementById("playHandBtn").style.visibility = "visible";
+}
+function showStartBtn(){
+	document.getElementById("startBtn").style.visibility = "visible";
 }
 function hidePlayHandBtn(){
 	document.getElementById("playHandBtn").style.visibility = "hidden";
@@ -44,7 +60,7 @@ for(let i = 0; i < hide.length; i++){
 	hide[i].style.visibility='hidden'
 	}
 }
-function buildDiceTray(){
+function buildDiceTray(resetPot = true){
 	let buildArray = document.getElementsByClassName("diceTrayDisplay");
 	for(let i = 0; i < buildArray.length; i++){
 		buildArray[i].innerHTML = 2;
@@ -53,9 +69,11 @@ function buildDiceTray(){
 	document.getElementById("p2d13").innerHTML = 3;
 	document.getElementById("p1d10").innerHTML = 3;
 	document.getElementById("p2d10").innerHTML = 3;
+	if(resetPot){
 	document.getElementById("p1Chips").innerHTML = 50;
 	document.getElementById("p2Chips").innerHTML = 50;
 	document.getElementById("potOutput").innerHTML = 0;
+	}
 }
 function displayDie(size, location, className,){
 	let number = rollDie(size);
@@ -88,6 +106,17 @@ function displayDie(size, location, className,){
 		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>K</h1>";
 		}
 		document.getElementById(location).style.paddingTop = "14%";
+}
+function clearDiceSlot(element){
+	element.innerHTML = "";
+	element.style.backgroundImage = "";
+	element.style.paddingTop = "18%";
+}
+function clearDiceSlots(){
+	let diceArray = document.getElementsByClassName("diceSlot");
+	for(let i = 0; i < diceArray.length; i ++){
+		clearDiceSlot(diceArray[i]);
+	}
 }
 function displayTestDie(size, location, className, suit){
 	let number = size;
@@ -174,7 +203,7 @@ function closeP1Bets(){
 		else if(!areBetsOpen() && document.getElementsByClassName("riverDie").length == 0){
 			river();
 		}
-		else{
+		else if(!areBetsOpen()){
 			adjudicateHands();
 		}
 }
@@ -190,7 +219,7 @@ function closeP2Bets(){
 		else if(!areBetsOpen() && document.getElementsByClassName("riverDie").length == 0){
 			river();
 		}
-		else{
+		else if(!areBetsOpen()){
 			adjudicateHands();
 		}
 }
@@ -315,7 +344,11 @@ function useSecondDiceP2(location, size, target){
 function takeBlindP1(){
 	let blind = 5;
 	let pot = parseInt(document.getElementById("potOutput").innerHTML);
-	if(document.getElementById("p1Chips").innerHTML > blind){
+	if(document.getElementById("p1Chips").innerHTML == 0){
+		p1Loses();
+		return false;
+	}
+	else if(document.getElementById("p1Chips").innerHTML > blind){
 		document.getElementById("p1Chips").innerHTML -= blind;
 		pot += blind;
 		document.getElementById("potOutput").innerHTML = pot;
@@ -328,15 +361,15 @@ function takeBlindP1(){
 		document.getElementById("potOutput").innerHTML = pot;
 		return true;
 	}
-	else{
-		p1Loses();
-		return false;
-	}
 }
 function takeBlindP2(){
 	let blind = 5;
 	let pot = parseInt(document.getElementById("potOutput").innerHTML);
-	if(document.getElementById("p2Chips").innerHTML > blind){
+	if(document.getElementById("p1Chips").innerHTML == 0){
+		p1Loses();
+		return false;
+	}
+	else if(document.getElementById("p2Chips").innerHTML > blind){
 		document.getElementById("p2Chips").innerHTML -= blind;
 		pot += blind;
 		document.getElementById("potOutput").innerHTML = pot;
@@ -348,10 +381,6 @@ function takeBlindP2(){
 		pot += blind;
 		document.getElementById("potOutput").innerHTML = pot;
 		return true;
-	}
-	else{
-		p2Loses();
-		return false;
 	}
 }
 function areAllDiceChosen(){
@@ -369,11 +398,25 @@ function areBetsOpen(){
 		return true;
 	}
 }
-function p1Loses(){
-
+function checkDiceTray(){
+	let remainingDice = 0;
+	remainingDice += parseInt(document.getElementById("p2d13").innerHTML);
+	remainingDice += parseInt(document.getElementById("p2d10").innerHTML);
+	remainingDice += parseInt(document.getElementById("p2d8").innerHTML);
+	remainingDice += parseInt(document.getElementById("p2d6").innerHTML);
+	remainingDice += parseInt(document.getElementById("p2d4").innerHTML);
+	remainingDice += parseInt(document.getElementById("p2d3").innerHTML);
+	if(remainingDice == 0){
+		buildDiceTray(false);
+	}
 }
 function p1Loses(){
-
+	document.getElementById("textOutput").innerHTML = "Player 1 is out of chips. Play Again?";
+	showPlayAgainBtn();
+}
+function p2Loses(){
+	document.getElementById("textOutput").innerHTML = "Player 2 is out of chips. Play Again?";
+	showPlayAgainBtn();
 }
 function splitPot(){
 	let pot = parseInt(document.getElementById("potOutput").innerHTML);
@@ -382,26 +425,46 @@ function splitPot(){
 	document.getElementById("p1Chips").innerHTML = parseInt(document.getElementById("p1Chips").innerHTML) + pot;
 	document.getElementById("p2Chips").innerHTML = parseInt(document.getElementById("p2Chips").innerHTML) + pot;
 	document.getElementById("potOutput").innerHTML = rollover;
-}
-function p1WinsHand(){
+	showPlayHandBtn();
+	document.getElementById("textOutput").innerHTML = "The pot is split.";
 
 }
 function p1WinsHand(){
-	
+	let pot = parseInt(document.getElementById("potOutput").innerHTML);
+	document.getElementById("p1Chips").innerHTML = parseInt(document.getElementById("p1Chips").innerHTML) + pot;
+	document.getElementById("potOutput").innerHTML = 0;
+	showPlayHandBtn();
+	document.getElementById("textOutput").innerHTML = "Player 1 wins the hand.";
+}
+function p2WinsHand(){
+	let pot = parseInt(document.getElementById("potOutput").innerHTML);
+	document.getElementById("p2Chips").innerHTML = parseInt(document.getElementById("p2Chips").innerHTML) + pot;
+	document.getElementById("potOutput").innerHTML = 0;
+	showPlayHandBtn();
+	document.getElementById("textOutput").innerHTML = "Player 2 wins the hand.";
 }
 function adjudicateHands(){
-	let player1Hand = getHandMatrix(document.getElementsByClassName("p1Hand"));
-	let player2Hand = getHandMatrix(document.getElementsByClassName("p2Hand"));
-	player1Hand = getBestHand(player1Hand);
-	player2Hand = getBestHand(player2Hand);
-	if(compareHandVaues(player1Hand, player2Hand, true).pop() == "tie"){
+	let player1Hand = getBestHand(1);
+	let player2Hand = getBestHand(2);
+	console.log("check if the funtion is called")
+	let winningHand = compareHandVaues(player1Hand, player2Hand, true);
+	if(winningHand[winningHand.length - 1] == "tie"){
 		splitPot();
+		console.log(player1Hand);
+		console.log(player2Hand);
+		console.log("split");
 	}
-	else if(compareHandVaues(player1Hand, player2Hand, true).pop() == player1Hand){
+	else if(winningHand == player1Hand){
 		p1WinsHand();
+		console.log(player1Hand);
+		console.log(player2Hand);
+		console.log("P1 Wins");
 	}
-	else if(compareHandVaues(player1Hand, player2Hand, true).pop() == player2Hand){
+	else if(winningHand == player2Hand){
 		p2WinsHand();
+		console.log(player1Hand);
+		console.log(player2Hand);
+		console.log("P2 Wins");
 	}
 }
 function getDiceSuit(dice){
@@ -473,50 +536,64 @@ function getHandMatrix(array){
 function getBestHand(playerNumber){
 	let inputMatrix = getHandMatrix(document.getElementsByClassName("p" + playerNumber + "Hand"));
 	let testMatrix = [[]];
-	let currentHighestValue = 0;
 	let currentBestHand = [0,0,0,0,0];
-	if(inputMatrix.length == 7){
-		for(let i = 0; i < inputMatrix.length; i++){
-			for(let j = 0; j < inputMatrix.length; j++){
-				if(i !== j){
-						testMatrix = [];
-					for(let k = 0; k < inputMatrix.length; k++){
-						if(k !== i && k !== j){
-							testMatrix.push(inputMatrix[k]);
+		for(let i = 0; i < inputMatrix.length -4; i++){
+			for(let j = i + 1; j < inputMatrix.length -3; j++){
+				for(let k = j + 1; k < inputMatrix.length -2; k++){
+					for(let l = k + 1; l < inputMatrix.length -1; l++){
+						for(let m = l + 1; m < inputMatrix.length; m++){
+							if(areNotEqual(i,j,k,l,m)){
+								testMatrix = [];
+								testMatrix.push(inputMatrix[i]);
+								testMatrix.push(inputMatrix[j]);
+								testMatrix.push(inputMatrix[k]);
+								testMatrix.push(inputMatrix[l]);
+								testMatrix.push(inputMatrix[m]);
+								console.log(currentBestHand);
+								currentBestHand = compareHandVaues(testMatrix, currentBestHand);
+							}
+
 						}
 					}
-					//console.log(getHandValue(testMatrix));
-					currentBestHand = compareHandVaues(testMatrix, currentBestHand);
+					
 				}
 			}
 		}
-	} else{
-		for(let i = 0; i < inputMatrix.length; i++){
-			for(let j = 0; j < inputMatrix.length; j++){
-				for(let l = 0; l < inputMatrix.length; l++){
-					if(i !== j && l !== j && i !== l){
-							testMatrix = [];
-						for(let k = 0; k < inputMatrix.length; k++){
-							if(k !== i && k !== j && k !== l){
-								testMatrix.push(inputMatrix[k]);
-							}
-						}
-						//console.log(getHandValue(testMatrix));
-					currentBestHand = compareHandVaues(testMatrix, currentBestHand);
-					}
+	console.log(currentBestHand);
+	return currentBestHand;
+}
+function areNotEqual(i,j,k,l,m){
+	if(i !== j && i !== k && i !== l && i !== m){
+		if(j !== k && j !== l && j !== m){
+			if(k !== l && k !== m){
+				if(l !== m){
+					return true;
 				}
 			}
 		}
 	}
-	return currentBestHand;
+	return false;
+}
+function isInvalidHand(matrix){
+	for(let i = 0; i < matrix.length; i++){
+		for(let j = 0; j < matrix.length; j++){
+			if(matrix[i][0] === 1 && matrix[j][0] === 14){
+				return true;
+			}
+		}
+	}
+	return false;
 }
 function getHandValue(matrix){
 	let highCard = getHighCard(matrix);
 	let repeats;
+	if(isInvalidHand(matrix)){
+		return [0];
+	}
 	if(isNofAKind(matrix)){
 		repeats = getNOfAKind(matrix);
 	} else{
-		repeats = 0;
+		repeats = [0];
 	}
 	if(isStraight(matrix) && isFlush(matrix)){
 		return [9,highCard];
@@ -524,7 +601,7 @@ function getHandValue(matrix){
 	else if(repeats[0] == 4){
 		return [8,repeats[1],getNOfAKindKicker(matrix)];
 	}
-	else if(isfullHouse(matrix)){
+	else if(isFullHouse(matrix)){
 		return [7,getFullHouseTop(matrix),getFullHouseBottom(matrix)];
 	}
 	else if(isFlush(matrix)){
@@ -619,15 +696,26 @@ function getNOfAKindKicker(matrix){
 	let testMatrix = [];
 	for(let i = 0; i < matrix.length; i++){
 		if(matrix[i][0] !== repeatCard){
-			testMatrix.push(matrix1[i]);
+			testMatrix.push(matrix[i]);
 		}
 	}
 	return getHighCard(testMatrix);
 }
+function handleAceFlushWeirdness(matrix){
+	let output = [];
+	for(let i = 0; i < matrix.length; i++){
+		if(matrix[i][0] !== 1){
+			output.push(matrix[i]);
+		}
+	}
+	return output;
+}
 function isFlush(matrix){
 	let counter = 0;
+	matrix = handleAceFlushWeirdness(matrix);
 	for(let i = 0; i < matrix.length; i++){
-		if(matrix[i][1] === matrix[0][1]){
+		if(matrix[i][1] === matrix[0][1] && matrix !== 0 && matrix[i][1] !== undefined){
+
 			counter++;
 		}
 	if(counter >=5){
@@ -637,7 +725,7 @@ function isFlush(matrix){
 	return false;
 }
 function getHighCard(matrix){
-	let currentLargest = 2;
+	let currentLargest = 0;
 	for(let i = 0; i < matrix.length; i++){
 		if(matrix[i][0] > currentLargest){
 			currentLargest = matrix[i][0];
@@ -680,7 +768,7 @@ function getNOfAKind(matrix){
 		return [currentLargest, currentCard];
 	
 }
-function isfullHouse(matrix){
+function isFullHouse(matrix){
 	let counter1;
 	let counter2;
 	for(let i = 0; i < matrix.length; i++){
@@ -722,7 +810,7 @@ function isTwoPair(matrix){
 		let firstPair = getNOfAKind(matrix);
 		for(let i = 0; i < matrix.length; i++){
 			for(let j = 0; j < matrix.length; j++){
-				if(i !== j && matrix[i][0] == matrix[j][0] && matrix[i][0] !== firstPair[1] && !isfullHouse(matrix)){
+				if(i !== j && matrix[i][0] == matrix[j][0] && matrix[i][0] !== firstPair[1] && !isFullHouse(matrix) && matrix[j][0] !== 1 && firstPair[1] !== 1){
 					return true;
 				}	
 			}
@@ -743,10 +831,10 @@ function getTwoPairValue(matrix){
 			}
 		}
 		if(secondPair[0] > firstPair[0]){
-			return [secondPair[0], firstPair[0],getTwoPairKicker(matrix,secondPair[0],firstPair[0])];
+			return [secondPair[0], firstPair[0],getTwoPairKicker(matrix,secondPair[1],firstPair[1])];
 		}
 		else{
-			return [firstPair[0], secondPair[0],getTwoPairKicker(matrix,secondPair[0],firstPair[0])]
+			return [firstPair[0], secondPair[0],getTwoPairKicker(matrix,secondPair[1],firstPair[1])]
 		}
 }
 function getTwoPairKicker(matrix, firstCard, secondCard){

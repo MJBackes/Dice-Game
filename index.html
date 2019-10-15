@@ -45,7 +45,7 @@
 					<fieldset class="chipCount">
 						<h2 id="p1Chips"></h2>
 						<h3>Chips</h5>
-							<input type="number" id="p1BetInput" class="betInput hidden bet">
+							<input type="number" id="p1BetInput" class="betInput hidden bet" value="0">
 							<button type="button" id="p1BetBtn" class="betButton hidden bet" onclick="placeBetP1()">Bet</button>
 					</fieldset>
 				</form>
@@ -88,7 +88,7 @@
 					<fieldset class="chipCount">
 						<h2 id="p2Chips"></h2>
 						<h3>Chips</h5>
-							<input type="number" id="p2BetInput" class="betInput hidden bet">
+							<input type="number" id="p2BetInput" class="betInput hidden bet" value="0">
 							<button type="button" id="p2BetBtn" class="betButton hidden bet" onclick="placeBetP2()">Bet</button>
 					</fieldset>
 				</form>
@@ -127,31 +127,44 @@
 		<div class="row">
 			<div class="col3"></div>
 			<div id="startContainer" class="col3">
-				<button type="button" class="start hidden" onclick="start()">Start!</button>
+				<button type="button" id="startBtn" class="start hidden" onclick="start()">Start!</button>
 				<br>
 				<button type="button" id="playHandBtn" class="playHand hidden" onclick="playHand()">Play Hand</button>
-				<br>
+			</div>
+			<div class="col3"></div>
+		</div>
+		<div class="row">
+			<div class="col3"></div>
+
+			<div class="textDisplay col3">
+				<h2 id="textOutput"></h2>
+			</div>
+			<div class="col3"></div>
+
+		</div>
+		<div class="row">
+			<div class="col3"></div>
+			<div id="replayContainer" class="col3">
 				<button type="button" id="playAgainBtn" class="playAgain hidden" onclick="playAgain()">Play Again?</button>
 				<br>
-				<button type="button" id="testHandBtn" class="testHand" onclick="testHand()">Test Hand</button>
 			</div>
 			<div class="col3"></div>
 		</div>
 		<div class="row">
 			<div class="board">
-				<div id="public1" class="diceSlot flopSlot">
+				<div id="public1" class="diceSlot flopSlot boardSlot">
 					
 				</div>
-				<div id="public2" class="diceSlot flopSlot">
+				<div id="public2" class="diceSlot flopSlot boardSlot">
 					
 				</div>
-				<div id="public3" class="diceSlot flopSlot">
+				<div id="public3" class="diceSlot flopSlot boardSlot">
 					
 				</div>
-				<div id="public4" class="diceSlot turnSlot">
+				<div id="public4" class="diceSlot turnSlot boardSlot">
 					
 				</div>
-				<div id="public5" class="diceSlot riverSlot">
+				<div id="public5" class="diceSlot riverSlot boardSlot">
 					
 				</div>
 			</div>

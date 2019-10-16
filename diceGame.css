@@ -28,13 +28,18 @@ legend{
 	font-size: 34px;
 	font-weight: bold;
 }
-.diceSlot h1{
+.diceSlot{
+	display: inline-block;
+}
+.diceSlot p{
 	margin: 0px;
 	padding: 0px;
-	position: relative;
+	display: inline-block;
 	transform: translate(0, -130%);
 	font-size: 38px;
-	
+	font-weight: bold;
+	transform-origin: center; 
+	transform :rotate(180deg);
 }
 #player1Tray h2{
 	color: blue;
@@ -55,10 +60,14 @@ legend{
 #player1Tray fieldset{
 	border-color: lightblue;
 	border-width: 5px;
+	border-style: solid;
+	border-radius: 5px;
 }
 #player2Tray fieldset{
 	border-color: pink;
-	border-width: 4px;
+	border-width: 5px;
+	border-style: solid;
+	border-radius: 5px;
 }
 .diceButton{
 	border-radius: none;
@@ -79,6 +88,7 @@ legend{
 	border: none;
 }
 .betButton{
+	height: 25px;
 }
 .betInput{
 	width: 45px;
@@ -86,6 +96,26 @@ legend{
 	font-size: 21px;
 	background-color: lightgreen;
 
+}
+.diceSlot{
+	font-family: "Times New Roman", Times, serif;
+	border: 2px;
+	border-color: white;
+	border-style: solid;
+}
+.playerSlot p{
+	transform: translate(0,-75%);
+}
+.boardSlot p{
+	transform: translate(0,-75%);
+}
+@media screen and (min-width: 510px){
+	.playerSlot p{
+	transform: translate(0,-100%);
+}
+.boardSlot p{
+	transform: translate(0,-165%);
+}
 }
 .boardSlot{
 	margin-top: 5%;
@@ -108,6 +138,7 @@ legend{
 	background-size: cover;
 	text-align: center;
 	color: white;
+
 
 }
 .p2DiceSlot{
@@ -157,6 +188,7 @@ legend{
 	color: yellow;
 	font-size: 40px;
 	margin-bottom: 0px;
+	font-family: Arial, Helvetica, sans-serif;
 }
 .toCall{
 	width: 100%;
@@ -164,4 +196,5 @@ legend{
 	color: yellow;
 	font-size: 40px;
 	margin-bottom: 0px;
+	font-family: Arial, Helvetica, sans-serif;
 }

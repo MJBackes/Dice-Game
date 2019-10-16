@@ -4,7 +4,7 @@
 	<title>(Pseudo)Texas Hold'em</title>
 	<link rel="stylesheet" type="text/css" href="diceGame.css">
 </head>
-<body>
+<body onload="runWhenLoaded()">
 	<div id="container">
 		<div id="row">
 			<div class="halfCol">
@@ -110,18 +110,18 @@
 		</div>
 		<div class="row">
 			<div class="halfCol" id="p1RolledDice">
-				<div id="p1s1" class="p1DiceSlot diceSlot">
+				<div id="p1s1" class="p1DiceSlot playerSlot diceSlot">
 					
 				</div>
-				<div id="p1s2" class="p1DiceSlot diceSlot">
+				<div id="p1s2" class="p1DiceSlot playerSlot diceSlot">
 					
 				</div>
 			</div>
 			<div class="halfCol" id="p2RolledDice">
-				<div id="p2s1" class="p2DiceSlot diceSlot">
+				<div id="p2s1" class="p2DiceSlot playerSlot diceSlot">
 					
 				</div>
-				<div id="p2s2" class="p2DiceSlot diceSlot">
+				<div id="p2s2" class="p2DiceSlot playerSlot diceSlot">
 					
 				</div>
 			</div>
@@ -148,12 +148,29 @@
 			<div class="col3"></div>
 		</div>
 		<div class="row">
-			<div class="col3"></div>
+			<div class="col3">
+				
+			</div>
 
 			<div class="textDisplay col3">
 				<h2 id="textOutput"></h2>
 			</div>
-			<div class="col3"></div>
+			<div class="col3">
+				
+			</div>
+
+		</div>
+		<div class="row">
+			<div class="col3">
+				
+			</div>
+
+			<div class="textDisplay col3">
+				<h2 id="handTextOutput"></h2>
+			</div>
+			<div class="col3">
+				
+			</div>
 
 		</div>
 		<div class="row">

@@ -1,5 +1,7 @@
-hideInterface();
-showStartBtn();
+function runWhenLoaded(){
+	hideInterface();
+	showStartBtn();
+}
 function start(){
 	hideInterface();
 	buildDiceTray();
@@ -23,18 +25,8 @@ function playAgain(){
 }
 function clearText(){
 	document.getElementById("textOutput").innerHTML = "";
-}
-function testHand(){
-	displayTestDie(1, 'public1', "playerDice p1Hand p2Hand", "hearts");
-	displayTestDie(2, 'public2', "playerDice p1Hand p2Hand", "hearts");
-	displayTestDie(3, 'public3', "playerDice p1Hand p2Hand", "hearts");
-	displayTestDie(4, 'public4', "playerDice p1Hand p2Hand", "hearts");
-	displayTestDie(5, 'public5', "playerDice p1Hand p2Hand", "hearts");
-	displayTestDie(6, 'p1s1', "playerDice p1Hand", "hearts");
-	displayTestDie(7, 'p1s2', "playerDice p1Hand", "hearts");
-	displayTestDie(8, 'p2s1', "playerDice p2Hand", "hearts");
-	displayTestDie(9, 'p2s2', "playerDice p2Hand", "hearts");
-	
+	document.getElementById("handTextOutput").innerHTML = "";
+
 }
 function showPlayHandBtn(){
 	document.getElementById("playHandBtn").style.visibility = "visible";
@@ -79,32 +71,62 @@ function buildDiceTray(resetPot = true){
 function displayDie(size, location, className,){
 	let number = rollDie(size);
 	let suit = "";
-	if(size > 9){
-	document.getElementById(location).style.backgroundImage = "url(images/diamonds.png)";
-	suit = 'diamonds';
-	}
-	else if(size > 5){
-	document.getElementById(location).style.backgroundImage = "url(images/hearts.png)";
-	suit = 'hearts';
-	}
-	else if(size > 2){
-	document.getElementById(location).style.backgroundImage = "url(images/clubs.png)";
-	suit = 'clubs';
+	if(location.charAt(1)=="u"){
+		if(size > 9){
+		document.getElementById(location).style.backgroundImage = "url(images/diamondsGreen.png)";
+		suit = 'diamonds';
+		}
+		else if(size > 5){
+		document.getElementById(location).style.backgroundImage = "url(images/heartsGreen.png)";
+		suit = 'hearts';
+		}
+		else if(size > 2){
+		document.getElementById(location).style.backgroundImage = "url(images/clubsGreen.png)";
+		suit = 'clubs';
+		}
 	}	
+	if(location.charAt(1)=="1"){
+		if(size > 9){
+		document.getElementById(location).style.backgroundImage = "url(images/diamondsBlue.png)";
+		suit = 'diamonds';
+		}
+		else if(size > 5){
+		document.getElementById(location).style.backgroundImage = "url(images/heartsBlue.png)";
+		suit = 'hearts';
+		}
+		else if(size > 2){
+		document.getElementById(location).style.backgroundImage = "url(images/clubsBlue.png)";
+		suit = 'clubs';
+		}
+	}
+	if(location.charAt(1)=="2"){
+		if(size > 9){
+		document.getElementById(location).style.backgroundImage = "url(images/diamondsPink.png)";
+		suit = 'diamonds';
+		}
+		else if(size > 5){
+		document.getElementById(location).style.backgroundImage = "url(images/heartsPink.png)";
+		suit = 'hearts';
+		}
+		else if(size > 2){
+		document.getElementById(location).style.backgroundImage = "url(images/clubsPink.png)";
+		suit = 'clubs';
+		}
+	}
 		if(number == 1){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>A</h1>";
+		document.getElementById(location).innerHTML = "<p class='" + className + " " + suit + "'>A</p>";
 		}
 		else if(number < 11){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>" + number + "</h1>";
+		document.getElementById(location).innerHTML = "<p class='" + className + " " + suit + "'>" + number + "</p>";
 		}
 		else if(number == 11){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>J</h1>";
+		document.getElementById(location).innerHTML = "<p class='" + className + " " + suit + "'>J</p>";
 		}
 		else if(number == 12){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>Q</h1>";
+		document.getElementById(location).innerHTML = "<p class='" + className + " " + suit + "'>Q</p>";
 		}
 		else if(number == 13){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>K</h1>";
+		document.getElementById(location).innerHTML = "<p class='" + className + " " + suit + "'>K</p>";
 		}
 		document.getElementById(location).style.paddingTop = "14%";
 }
@@ -118,37 +140,6 @@ function clearDiceSlots(){
 	for(let i = 0; i < diceArray.length; i ++){
 		clearDiceSlot(diceArray[i]);
 	}
-}
-function displayTestDie(size, location, className, suit){
-	let number = size;
-	if(suit === "diamonds"){
-	document.getElementById(location).style.backgroundImage = "url(images/diamonds.png)";
-	suit = 'diamonds';
-	}
-	else if(suit === "hearts"){
-	document.getElementById(location).style.backgroundImage = "url(images/hearts.png)";
-	suit = 'hearts';
-	}
-	else if(suit === "clubs"){
-	document.getElementById(location).style.backgroundImage = "url(images/clubs.png)";
-	suit = 'clubs';
-	}
-			if(number == 1){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>A</h1>";
-		}
-		else if(number < 11){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>" + number + "</h1>";
-		}
-		else if(number == 11){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>J</h1>";
-		}
-		else if(number == 12){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>Q</h1>";
-		}
-		else if(number == 13){
-		document.getElementById(location).innerHTML = "<h1 class='" + className + " " + suit + "'>K</h1>";
-		}
-		document.getElementById(location).style.paddingTop = "14%";
 }
 function getPublicDiceSize(){
 	let size = rollDie(6);
@@ -187,6 +178,7 @@ function river(){
 	openP1Bets();
 }
 function openP1Bets(toCall = 0){
+	document.getElementById("p1BetInput").value=0;
 	let betArray = document.getElementsByClassName("betP1");
 	for(let i = 0; i < betArray.length; i++){
 		betArray[i].style.visibility = "visible";
@@ -200,6 +192,7 @@ function openP1Bets(toCall = 0){
 	}
 }
 function openP2Bets(toCall = 0){
+	document.getElementById("p2BetInput").value=0;
 	let betArray = document.getElementsByClassName("betP2");
 	for(let i = 0; i < betArray.length; i++){
 		betArray[i].style.visibility = "visible";
@@ -212,19 +205,23 @@ function openP2Bets(toCall = 0){
 		document.getElementById("p2CheckBtn").style.visibility = "hidden";
 	}
 }
-function closeP1Bets(){
+function closeP1Bets(isFold = false){
 	let betArray = document.getElementsByClassName("betP1");
 	for(let i = 0; i < betArray.length; i++){
 		betArray[i].style.visibility = "hidden";
 	}
-	gameFlow();
+	if(!isFold){
+		gameFlow();
+	}
 }
-function closeP2Bets(){
+function closeP2Bets(isFold = false){
 	let betArray = document.getElementsByClassName("betP2");
 	for(let i = 0; i < betArray.length; i++){
 		betArray[i].style.visibility = "hidden";
 	}
-	gameFlow();
+	if(!isFold){
+		gameFlow();
+	}
 }
 function hideCallOutput(){
 	document.getElementById("callAmount").style.visibility = "hidden";
@@ -294,7 +291,11 @@ function callP1(){
 		hideCallOutput();
 	}
 	else{
-		alert("Call too large(Player 1).");
+		document.getElementById("potOutput").innerHTML = parseInt(document.getElementById("p1Chips").innerHTML) + parseInt(document.getElementById("potOutput").innerHTML);
+		document.getElementById("p1Chips").innerHTML = 0;;
+		document.getElementById("callAmount").innerHTML = 0;
+		closeP1Bets();
+		hideCallOutput();
 	}
 }
 function callP2(){
@@ -307,7 +308,11 @@ function callP2(){
 		hideCallOutput();
 	}
 	else{
-		alert("Call too large(Player 2).");
+		document.getElementById("potOutput").innerHTML = parseInt(document.getElementById("p2Chips").innerHTML) + parseInt(document.getElementById("potOutput").innerHTML);
+		document.getElementById("p2Chips").innerHTML = 0;;
+		document.getElementById("callAmount").innerHTML = 0;
+		closeP2Bets();
+		hideCallOutput();
 	}
 }
 function checkP1(){
@@ -512,6 +517,7 @@ function p1WinsHand(){
 	document.getElementById("p1Chips").innerHTML = parseInt(document.getElementById("p1Chips").innerHTML) + pot;
 	document.getElementById("potOutput").innerHTML = 0;
 	showPlayHandBtn();
+	closeP2Bets(true);
 	document.getElementById("textOutput").innerHTML = "Player 1 wins the hand.";
 }
 function p2WinsHand(){
@@ -519,6 +525,7 @@ function p2WinsHand(){
 	document.getElementById("p2Chips").innerHTML = parseInt(document.getElementById("p2Chips").innerHTML) + pot;
 	document.getElementById("potOutput").innerHTML = 0;
 	showPlayHandBtn();
+	closeP1Bets(true);
 	document.getElementById("textOutput").innerHTML = "Player 2 wins the hand.";
 }
 function adjudicateHands(){
@@ -527,21 +534,52 @@ function adjudicateHands(){
 	let winningHand = compareHandVaues(player1Hand, player2Hand, true);
 	if(winningHand[winningHand.length - 1] == "tie"){
 		splitPot();
-		console.log(player1Hand);
-		console.log(player2Hand);
+		printWinningHandText(winningHand);
 		console.log("split");
 	}
 	else if(winningHand == player1Hand){
 		p1WinsHand();
-		console.log(player1Hand);
-		console.log(player2Hand);
+		printWinningHandText(winningHand);
 		console.log("P1 Wins");
 	}
 	else if(winningHand == player2Hand){
 		p2WinsHand();
-		console.log(player1Hand);
-		console.log(player2Hand);
+		printWinningHandText(winningHand);
 		console.log("P2 Wins");
+	}
+}
+function printWinningHandText(matrix){
+	let valueArray = getHandValue(matrix);
+	switch(valueArray[0]){
+		case 9:
+			document.getElementById("handTextOutput").innerHTML = convertFaceCardValues(valueArray[1]) + " high straight flush.";
+			break;
+		case 8:
+			document.getElementById("handTextOutput").innerHTML = "Four of a kind(" + convertFaceCardValues(valueArray[1]) + "s)";
+			break;
+		case 7:
+			document.getElementById("handTextOutput").innerHTML = "Full House(" + convertFaceCardValues(valueArray[1]) + "'s on " + convertFaceCardValues(valueArray[2]) + "'s)";
+			break;
+		case 6:
+			document.getElementById("handTextOutput").innerHTML = convertFaceCardValues(valueArray[1]) + " high flush.";
+			break;
+		case 5:
+			document.getElementById("handTextOutput").innerHTML = convertFaceCardValues(valueArray[1]) + " high straight";
+			break;
+		case 4:
+			document.getElementById("handTextOutput").innerHTML = "Three of a kind(" + convertFaceCardValues(valueArray[1]) + "s)";
+			break;
+		case 3:
+			document.getElementById("handTextOutput").innerHTML = "Two Pair( " + convertFaceCardValues(valueArray[1]) + "'s' and " + convertFaceCardValues(valueArray[2]) + "'s)";
+			break;
+		case 2:
+			document.getElementById("handTextOutput").innerHTML = "Pair of " + convertFaceCardValues(valueArray[1]) + "'s";
+			break;
+		case 1:
+			document.getElementById("handTextOutput").innerHTML = "Highcard " + convertFaceCardValues(valueArray[1]);
+			break;
+		default:
+			break;
 	}
 }
 function getDiceSuit(dice){
@@ -612,30 +650,6 @@ function getBestHand(playerNumber){
 	let inputMatrix = getHandMatrix(document.getElementsByClassName("p" + playerNumber + "Hand"));
 	let testMatrix = [[]];
 	let currentBestHand = [0,0,0,0,0];
-		/*for(let i = 0; i < inputMatrix.length -4; i++){
-			for(let j = i + 1; j < inputMatrix.length -3; j++){
-				for(let k = j + 1; k < inputMatrix.length -2; k++){
-					for(let l = k + 1; l < inputMatrix.length -1; l++){
-						for(let m = l + 1; m < inputMatrix.length; m++){
-							if(areNotEqual(i,j,k,l,m)){
-								testMatrix = [];
-								testMatrix.push(inputMatrix[i]);
-								testMatrix.push(inputMatrix[j]);
-								testMatrix.push(inputMatrix[k]);
-								testMatrix.push(inputMatrix[l]);
-								testMatrix.push(inputMatrix[m]);
-								currentBestHand = compareHandVaues(testMatrix, currentBestHand);
-							}
-
-						}
-					}
-					
-				}
-			}
-		}
-	console.log(currentBestHand + "5loop");
-	//return currentBestHand;
-	currentBestHand = [0,0,0,0,0];*/
 	for(let i = 0; i < (inputMatrix.length - 1); i++){
 		for(let j = i + 1; j < inputMatrix.length; j++){
 			testMatrix = [];
@@ -649,41 +663,21 @@ function getBestHand(playerNumber){
 	}
 	return currentBestHand;
 }
-function areNotEqual(i,j,k,l,m){
-	if(i !== j && i !== k && i !== l && i !== m){
-		if(j !== k && j !== l && j !== m){
-			if(k !== l && k !== m){
-				if(l !== m){
-					return true;
-				}
-			}
-		}
-	}
-	return false;
-}
-function isInvalidHand(matrix){
-	for(let i = 0; i < matrix.length; i++){
-		for(let j = 0; j < matrix.length; j++){
-			if(matrix[i][0] === 1 && matrix[j][0] === 14){
-				return true;
-			}
-		}
-	}
-	return false;
-}
 function getHandValue(matrix){
 	let highCard = getHighCard(matrix);
 	let repeats;
-	if(isInvalidHand(matrix)){
-		return [0,0,0,0,0,0];
-	}
 	if(isNofAKind(matrix)){
 		repeats = getNOfAKind(matrix);
 	} else{
 		repeats = [0,0];
 	}
 	if(isStraight(matrix) && isFlush(matrix)){
-		return [9,highCard,0,0,0,0];
+		if(highCard != 14 || getHighCard(matrix, highCard) == 13){
+			return [9,highCard,0,0,0,0];
+		}
+		else{
+			return [9,getHighCard(matrix, highCard),0,0,0,0]
+		}
 	}
 	else if(repeats[0] == 4){
 		return [8,repeats[1],highCard,getHighCard(matrix,highCard),0,0,0];
@@ -695,19 +689,43 @@ function getHandValue(matrix){
 		return [6,highCard,getHighCard(matrix, highCard),getHighCard(matrix, getHighCard(matrix, highCard)),getHighCard(matrix, getHighCard(matrix, getHighCard(matrix, highCard))),getHighCard(matrix,getHighCard(matrix, getHighCard(matrix, getHighCard(matrix, highCard))))];
 	}
 	else if(isStraight(matrix)){
-		return [5,highCard,0,0,0,0];
+		if(highCard != 14 || getHighCard(matrix, highCard) == 13){
+			return [5,highCard,0,0,0,0];
+		}
+		else{
+			return [5,getHighCard(matrix, highCard),0,0,0,0]
+		}
 	}
 	else if(repeats[0] == 3){
-		return [4,repeats[1],getHighCard(matrix, repeats[1]), getHighCard(getHighCard(matrix, repeats[1])),0,0,0];
+		return [4,repeats[1], highCard, getHighCard(matrix, highCard),getHighCard(getHighCard(matrix, highCard)),0,0];
 	}
 	else if(isTwoPair(matrix)){
-		return [3,repeats[1],getTwoPairValue(matrix),getTwoPairKicker(matrix, repeats[1], getTwoPairValue(matrix)),0];
+		return [3,repeats[1],getTwoPairSecondPair(matrix),getTwoPairKicker(matrix, repeats[1], getTwoPairSecondPair(matrix)),0];
 	}
 	else if(repeats[0] == 2){
 		return [2,repeats[1],highCard,getHighCard(matrix, highCard),getHighCard(matrix, getHighCard(matrix, highCard)),getHighCard(matrix, getHighCard(matrix, getHighCard(matrix, highCard))),0]
 	}
 	else{
 		return [1,highCard,0,0,0];
+	}
+}
+function convertFaceCardValues(number){
+	switch(number){
+		case 14:
+			return "Ace";
+			break;
+		case 13:
+			return "King";
+			break;
+		case 12:
+			return "Queen";
+			break;
+		case 11:
+			return "Jack";
+			break;
+		default:
+			return number;
+			break;
 	}
 }
 function compareHandVaues(matrix1, matrix2, isFinal = false){
@@ -726,16 +744,6 @@ function compareHandVaues(matrix1, matrix2, isFinal = false){
 	}
 	return matrix1;
 }
-function getNOfAKindKicker(matrix){
-	let repeatCard = getNOfAKind(matrix)[1];
-	let testMatrix = [];
-	for(let i = 0; i < matrix.length; i++){
-		if(matrix[i][0] !== repeatCard){
-			testMatrix.push(matrix[i]);
-		}
-	}
-	return getHighCard(testMatrix);
-}
 function isFlush(matrix){
 	let counter = 0;
 	for(let i = 0; i < matrix.length; i++){
@@ -748,7 +756,7 @@ function isFlush(matrix){
 	}
 	}
 	return false;
-}
+} 
 function getHighCard(matrix, currentHighCard = 15){
 	let currentLargest = 0;
 	for(let i = 0; i < matrix.length; i++){
@@ -820,7 +828,7 @@ function isFullHouse(matrix){
 	return false;
 }
 function getFullHouseTop(matrix){
-	return topCard = getNOfAKind(matrix)[1];
+	return getNOfAKind(matrix)[1];
 }
 function getFullHouseBottom(matrix){
 	let topCard = getFullHouseTop(matrix);
@@ -843,7 +851,7 @@ function isTwoPair(matrix){
 	}
 	return false;
 }
-function getTwoPairValue(matrix){
+function getTwoPairSecondPair(matrix){
 	let firstPair = getNOfAKind(matrix);
 	let secondPair =[];
 	let kicker;

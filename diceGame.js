@@ -663,6 +663,10 @@ function getBestHand(playerNumber){
 }
 function getHandValue(matrix){
 	let highCard = getHighCard(matrix);
+	let secondHighest = getHighCard(matrix, highCard);
+	let thirdHighest = getHighCard(matrix, secondHighest);
+	let fourthHighest = getHighCard(matrix, thirdHighest);
+	let fifthHighest = getHighCard(matrix, fourthHighest);
 	let repeats;
 	if(isNofAKind(matrix)){
 		repeats = getNOfAKind(matrix);
@@ -670,41 +674,41 @@ function getHandValue(matrix){
 		repeats = [0,0];
 	}
 	if(isStraight(matrix) && isFlush(matrix)){
-		if(highCard != 14 || getHighCard(matrix, highCard) == 13){
+		if(highCard != 14 || secondHighest == 13){
 			return [9,highCard,0,0,0,0];
 		}
 		else{
-			return [9,getHighCard(matrix, highCard),0,0,0,0]
+			return [9,secondHighest,0,0,0,0]
 		}
 	}
 	else if(repeats[0] == 4){
-		return [8,repeats[1],highCard,getHighCard(matrix,highCard),0,0,0];
+		return [8,repeats[1],highCard,secondHighest,0,0,0];
 	}
 	else if(isFullHouse(matrix)){
 		return [7,getFullHouseTop(matrix),getFullHouseBottom(matrix),0,0,0];
 	}
 	else if(isFlush(matrix)){
-		return [6,highCard,getHighCard(matrix, highCard),getHighCard(matrix, getHighCard(matrix, highCard)),getHighCard(matrix, getHighCard(matrix, getHighCard(matrix, highCard))),getHighCard(matrix,getHighCard(matrix, getHighCard(matrix, getHighCard(matrix, highCard))))];
+		return [6,highCard,secondHighest,thirdHighest,fourthHighest,fifthHighest];
 	}
 	else if(isStraight(matrix)){
-		if(highCard != 14 || getHighCard(matrix, highCard) == 13){
+		if(highCard != 14 || secondHighest == 13){
 			return [5,highCard,0,0,0,0];
 		}
 		else{
-			return [5,getHighCard(matrix, highCard),0,0,0,0]
+			return [5,secondHighest,0,0,0,0]
 		}
 	}
 	else if(repeats[0] == 3){
-		return [4,repeats[1], highCard, getHighCard(matrix, highCard),getHighCard(getHighCard(matrix, highCard)),0,0];
+		return [4,repeats[1], highCard, secondHighest,thirdHighest,0,0];
 	}
 	else if(isTwoPair(matrix)){
 		return [3,repeats[1],getTwoPairSecondPair(matrix),getTwoPairKicker(matrix, repeats[1], getTwoPairSecondPair(matrix)),0];
 	}
 	else if(repeats[0] == 2){
-		return [2,repeats[1],highCard,getHighCard(matrix, highCard),getHighCard(matrix, getHighCard(matrix, highCard)),getHighCard(matrix, getHighCard(matrix, getHighCard(matrix, highCard))),0]
+		return [2,repeats[1],highCard,secondHighest,thirdHighest,fourthHighest,0]
 	}
 	else{
-		return [1,highCard,0,0,0];
+		return [1,highCard,secondHighest,thirdHighest,fourthHighest,fifthHighest];
 	}
 }
 function convertFaceCardValues(number){
@@ -795,6 +799,9 @@ function getNOfAKind(matrix){
 			currentLargest = counter;
 			currentCard = matrix[i][0];
 		}
+		else if(counter == currentLargest && matrix[i][0] > currentCard){
+			currentCard = matrix[i][0];
+		}
 	}
 		return [currentLargest, currentCard];
 	
@@ -851,17 +858,16 @@ function isTwoPair(matrix){
 }
 function getTwoPairSecondPair(matrix){
 	let firstPair = getNOfAKind(matrix);
-	let secondPair =[];
-	let kicker;
+	let secondPair;
 		for(let i = 0; i < matrix.length; i++){
 			for(let j = 0; j < matrix.length; j++){
 				if(i !== j && matrix[i][0] == matrix[j][0] && matrix[i][0] !== firstPair[1]){
-					secondPair = [matrix[i][0],2];
+					secondPair = matrix[i][0];
 				}
 
 			}
 		}
-			return secondPair[0];
+			return secondPair;
 }
 function getTwoPairKicker(matrix, firstCard, secondCard){
 	for(let i = 0; i < matrix.length; i++){

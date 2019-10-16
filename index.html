@@ -45,8 +45,11 @@
 					<fieldset class="chipCount">
 						<h2 id="p1Chips"></h2>
 						<h3>Chips</h5>
-							<input type="number" id="p1BetInput" class="betInput hidden bet" value="0">
-							<button type="button" id="p1BetBtn" class="betButton hidden bet" onclick="placeBetP1()">Bet</button>
+							<input type="number" id="p1BetInput" class="betInput hidden bet betP1" value="0">
+							<button type="button" id="p1RaiseBtn" class="betButton hidden bet betP1" onclick="placeBetP1()">Raise</button>
+							<button type="button" id="p1CallBtn" class="betButton hidden bet betP1 callButton" onclick="callP1()">Call</button>
+							<button type="button" id="p1CheckBtn" class="betButton hidden bet betP1 callButton" onclick="checkP1()">Check</button>
+							<button type="button" id="p1FoldBtn" class="betButton hidden bet betP1" onclick="p2WinsHand()">Fold</button>
 					</fieldset>
 				</form>
 			</div>
@@ -88,11 +91,22 @@
 					<fieldset class="chipCount">
 						<h2 id="p2Chips"></h2>
 						<h3>Chips</h5>
-							<input type="number" id="p2BetInput" class="betInput hidden bet" value="0">
-							<button type="button" id="p2BetBtn" class="betButton hidden bet" onclick="placeBetP2()">Bet</button>
+							<input type="number" id="p2BetInput" class="betInput hidden bet betP2" value="0">
+							<button type="button" id="p2RaiseBtn" class="betButton hidden bet betP2" onclick="placeBetP2()">Raise</button>
+							<button type="button" id="p2CallBtn" class="betButton hidden bet betP2 callButton" onclick="callP2()">Call</button>
+							<button type="button" id="p2CheckBtn" class="betButton hidden bet betP2 callButton" onclick="checkP2()">Check</button>
+							<button type="button" id="p2FoldBtn" class="betButton hidden bet betP2" onclick="p1WinsHand()">Fold</button>
 					</fieldset>
 				</form>
 			</div>
+		</div>
+		<div class="row">
+			<div class="col3"></div>
+				<div id="callContainer" class="col3">
+					<h2 class="toCall hidden bet" id="callOutput">Amount to call:</h2><br>
+					<h2 class="toCall hidden bet" id="callAmount">0</h2>
+				</div>
+			<div class="col3"></div>
 		</div>
 		<div class="row">
 			<div class="halfCol" id="p1RolledDice">

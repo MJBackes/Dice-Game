@@ -344,11 +344,11 @@ function useSecondDiceP2(location, size, target){
 function takeBlindP1(){
 	let blind = 5;
 	let pot = parseInt(document.getElementById("potOutput").innerHTML);
-	if(document.getElementById("p1Chips").innerHTML == 0){
+	if(parseInt(document.getElementById("p1Chips").innerHTML) == 0){
 		p1Loses();
 		return false;
 	}
-	else if(document.getElementById("p1Chips").innerHTML > blind){
+	else if(parseInt(document.getElementById("p1Chips").innerHTML) > blind){
 		document.getElementById("p1Chips").innerHTML -= blind;
 		pot += blind;
 		document.getElementById("potOutput").innerHTML = pot;
@@ -365,11 +365,11 @@ function takeBlindP1(){
 function takeBlindP2(){
 	let blind = 5;
 	let pot = parseInt(document.getElementById("potOutput").innerHTML);
-	if(document.getElementById("p1Chips").innerHTML == 0){
-		p1Loses();
+	if(parseInt(document.getElementById("p2Chips").innerHTML) == 0){
+		p2Loses();
 		return false;
 	}
-	else if(document.getElementById("p2Chips").innerHTML > blind){
+	else if(parseInt(document.getElementById("p2Chips").innerHTML) > blind){
 		document.getElementById("p2Chips").innerHTML -= blind;
 		pot += blind;
 		document.getElementById("potOutput").innerHTML = pot;
@@ -446,7 +446,6 @@ function p2WinsHand(){
 function adjudicateHands(){
 	let player1Hand = getBestHand(1);
 	let player2Hand = getBestHand(2);
-	console.log("check if the funtion is called")
 	let winningHand = compareHandVaues(player1Hand, player2Hand, true);
 	if(winningHand[winningHand.length - 1] == "tie"){
 		splitPot();
@@ -513,9 +512,7 @@ function getHandMatrix(array){
 		output[outputIndex] = [0,""];
 		output[outputIndex][1] = getDiceSuit(array[i]);
 		if(array[i].innerHTML === "A"){
-			output[outputIndex][0] = 1;
-			output.push([14, getDiceSuit(array[i])]);
-			outputIndex++;
+			output[outputIndex][0] = 14;
 		}
 		else if(array[i].innerHTML === "J"){
 			output[outputIndex][0] = 11;
@@ -537,7 +534,7 @@ function getBestHand(playerNumber){
 	let inputMatrix = getHandMatrix(document.getElementsByClassName("p" + playerNumber + "Hand"));
 	let testMatrix = [[]];
 	let currentBestHand = [0,0,0,0,0];
-		for(let i = 0; i < inputMatrix.length -4; i++){
+		/*for(let i = 0; i < inputMatrix.length -4; i++){
 			for(let j = i + 1; j < inputMatrix.length -3; j++){
 				for(let k = j + 1; k < inputMatrix.length -2; k++){
 					for(let l = k + 1; l < inputMatrix.length -1; l++){
@@ -549,7 +546,6 @@ function getBestHand(playerNumber){
 								testMatrix.push(inputMatrix[k]);
 								testMatrix.push(inputMatrix[l]);
 								testMatrix.push(inputMatrix[m]);
-								console.log(currentBestHand);
 								currentBestHand = compareHandVaues(testMatrix, currentBestHand);
 							}
 
@@ -559,7 +555,20 @@ function getBestHand(playerNumber){
 				}
 			}
 		}
-	console.log(currentBestHand);
+	console.log(currentBestHand + "5loop");
+	//return currentBestHand;
+	currentBestHand = [0,0,0,0,0];*/
+	for(let i = 0; i < (inputMatrix.length - 1); i++){
+		for(let j = i + 1; j < inputMatrix.length; j++){
+			testMatrix = [];
+			for(let k = 0; k < inputMatrix.length; k++){
+				if(k !== j && k !== i){
+				testMatrix.push(inputMatrix[k]);
+				}
+			}
+			currentBestHand = compareHandVaues(testMatrix, currentBestHand);
+		}
+	}
 	return currentBestHand;
 }
 function areNotEqual(i,j,k,l,m){
@@ -588,108 +597,56 @@ function getHandValue(matrix){
 	let highCard = getHighCard(matrix);
 	let repeats;
 	if(isInvalidHand(matrix)){
-		return [0];
+		return [0,0,0,0,0];
 	}
 	if(isNofAKind(matrix)){
 		repeats = getNOfAKind(matrix);
 	} else{
-		repeats = [0];
+		repeats = [0,0];
 	}
 	if(isStraight(matrix) && isFlush(matrix)){
-		return [9,highCard];
+		return [9,highCard,0,0,0];
 	}
 	else if(repeats[0] == 4){
-		return [8,repeats[1],getNOfAKindKicker(matrix)];
+		return [8,repeats[1],getHighCard(repeats[1]),0,0];
 	}
 	else if(isFullHouse(matrix)){
-		return [7,getFullHouseTop(matrix),getFullHouseBottom(matrix)];
+		return [7,getFullHouseTop(matrix),getFullHouseBottom(matrix),0,0];
 	}
 	else if(isFlush(matrix)){
-		return [6,highCard];
+		return [6,highCard,getHighCard(highCard),getHighCard(getHighCard(highCard)),getHighCard(getHighCard(highCard))];
 	}
 	else if(isStraight(matrix)){
-		return [5,highCard];
+		return [5,highCard,0,0,0];
 	}
 	else if(repeats[0] == 3){
-		return [4,repeats[1],getNOfAKindKicker(matrix)];
+		return [4,repeats[1],getHighCard(repeats[1]), getHighCard(getHighCard(repeats[1])),0,0];
 	}
 	else if(isTwoPair(matrix)){
-		return [3,getTwoPairValue(matrix)];
+		return [3,repeats[1],getTwoPairValue(matrix),getTwoPairKicker(matrix, repeats[1], getTwoPairValue(matrix)),0];
 	}
 	else if(repeats[0] == 2){
-		return [2,repeats[1],getNOfAKindKicker(matrix)]
+		return [2,repeats[1],getHighCard(repeats[1]),getHighCard(getHighCard(repeats[1])),getHighCard(getHighCard(getHighCard(repeats[1])))]
 	}
 	else{
-		return [1,highCard];
+		return [1,highCard,0,0,0];
 	}
 }
 function compareHandVaues(matrix1, matrix2, isFinal = false){
 	let value1 = getHandValue(matrix1);
 	let value2 = getHandValue(matrix2);
-	if(value1[0] !== value2[0]){
-		if(value1[0] > value2[0]){
+	for(let i = 0; i < value1.length; i++){
+		if(value1[i] > value2[i]){
 			return matrix1;
 		}
-		else{
+		else if (value2[i] > value1[i]){
 			return matrix2;
 		}
 	}
-	else if(value1[1] != value2[1]){
-		if(value1[1] > value2[1]){
-			return matrix1;
-		}
-		else{
-			return matrix2;
-		}
+	if(isFinal){
+		matrix1.push("tie"); 
 	}
-	else if(isFullHouse(matrix1)){
-		if(value1[2] > value2[2]){
-			return matrix1;
-		}
-		else if(value1[2] < value2[2]){
-			return matrix2;
-		}
-		else{
-			if(isFinal){
-			matrix1.push("tie");
-		}
-			return matrix1;
-		}
-	}
-	else if(isTwoPair(matrix1)){
-		if(value1[2] > value2[2]){
-			return matrix1;
-		}
-		else if(value1[2] < value2[2]){
-			return matrix2;
-		}
-		else{
-			if(isFinal){
-			matrix1.push("tie");
-		}
-			return matrix1;
-		}
-	}
-	else if(isNofAKind(matrix1)){
-		if(value1[2] > value2[2]){
-			return matrix1;
-		}
-		else if(value1[2] < value2[2]){
-			return matrix2;
-		}
-		else{
-			if(isFinal){
-			matrix1.push("tie");
-		}
-			return matrix1;
-		}
-	}
-	else{
-		if(isFinal){
-			matrix1.push("tie");
-		}
-		return matrix1;
-	}
+	return matrix1;
 }
 function getNOfAKindKicker(matrix){
 	let repeatCard = getNOfAKind(matrix)[1];
@@ -701,18 +658,8 @@ function getNOfAKindKicker(matrix){
 	}
 	return getHighCard(testMatrix);
 }
-function handleAceFlushWeirdness(matrix){
-	let output = [];
-	for(let i = 0; i < matrix.length; i++){
-		if(matrix[i][0] !== 1){
-			output.push(matrix[i]);
-		}
-	}
-	return output;
-}
 function isFlush(matrix){
 	let counter = 0;
-	matrix = handleAceFlushWeirdness(matrix);
 	for(let i = 0; i < matrix.length; i++){
 		if(matrix[i][1] === matrix[0][1] && matrix !== 0 && matrix[i][1] !== undefined){
 
@@ -724,10 +671,10 @@ function isFlush(matrix){
 	}
 	return false;
 }
-function getHighCard(matrix){
+function getHighCard(matrix, currentHighCard = 15){
 	let currentLargest = 0;
 	for(let i = 0; i < matrix.length; i++){
-		if(matrix[i][0] > currentLargest){
+		if(matrix[i][0] > currentLargest && matrix[i][0] < currentHighCard){
 			currentLargest = matrix[i][0];
 		}
 	}
@@ -830,12 +777,7 @@ function getTwoPairValue(matrix){
 
 			}
 		}
-		if(secondPair[0] > firstPair[0]){
-			return [secondPair[0], firstPair[0],getTwoPairKicker(matrix,secondPair[1],firstPair[1])];
-		}
-		else{
-			return [firstPair[0], secondPair[0],getTwoPairKicker(matrix,secondPair[1],firstPair[1])]
-		}
+			return secondPair[0];
 }
 function getTwoPairKicker(matrix, firstCard, secondCard){
 	for(let i = 0; i < matrix.length; i++){
@@ -851,9 +793,14 @@ function isStraight(matrix){
 		current = matrix[i][0];
 		counter = 1;
 		for(let j = 0; j < matrix.length; j++){
-			if((current + 1) == matrix[j][0]){
+			if(((current + 1) == matrix[j][0]) || (current == 14 && matrix[j][0] == 2)){
+				if(current == 14){
+					current = 2;
+				}
+				else{
 				current++;
-				counter++
+				}	
+				counter++;
 				j = -1;
 			}
 		}

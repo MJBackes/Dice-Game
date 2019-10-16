@@ -130,7 +130,7 @@ legend{
 }
 .p1DiceSlot{
 	background-color: lightblue;
-	margin-top: 36%;
+	margin-top: 22%%;
 	width: 18%;
 	padding-top: 18%;
 	display: inline-block;
@@ -143,7 +143,7 @@ legend{
 }
 .p2DiceSlot{
 	background-color: pink;
-	margin-top: 36%;
+	margin-top: 22%;
 	width: 18%;
 	padding-top: 18%;
 	display: inline-block;
@@ -180,7 +180,7 @@ legend{
 	text-align: center;
 }
 #startContainer{
-	margin-top: 10%;
+	margin-top: 5%;
 }
 .textDisplay{
 	width: 100%;

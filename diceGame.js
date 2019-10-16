@@ -623,26 +623,24 @@ function isClub(dice){
 }
 function getHandMatrix(array){
 	let output = [];
-	let outputIndex = 0;
 	for(let i = 0; i < array.length; i++){
-		output[outputIndex] = [0,""];
-		output[outputIndex][1] = getDiceSuit(array[i]);
+		output[i] = [0,""];
+		output[i][1] = getDiceSuit(array[i]);
 		if(array[i].innerHTML === "A"){
-			output[outputIndex][0] = 14;
+			output[i][0] = 14;
 		}
 		else if(array[i].innerHTML === "J"){
-			output[outputIndex][0] = 11;
+			output[i][0] = 11;
 		}
 		else if(array[i].innerHTML === "Q"){
-			output[outputIndex][0] = 12;
+			output[i][0] = 12;
 		}
 		else if(array[i].innerHTML === "K"){
-			output[outputIndex][0] = 13;
+			output[i][0] = 13;
 		}
 		else{
-			output[outputIndex][0] = parseInt(array[i].innerHTML);
+			output[i][0] = parseInt(array[i].innerHTML);
 		}
-		outputIndex++;
 	}
 	return output;
 }
@@ -880,7 +878,7 @@ function isStraight(matrix){
 		counter = 1;
 		for(let j = 0; j < matrix.length; j++){
 			if(((current + 1) == matrix[j][0]) || (current == 14 && matrix[j][0] == 2)){
-				if(current == 14){
+				if(current == 14 && counter == 1){
 					current = 2;
 				}
 				else{
